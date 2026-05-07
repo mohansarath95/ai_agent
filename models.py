@@ -1,0 +1,6 @@
+model1p = "gemini-3.1-pro-preview"
+model2p = "gemini-3-flash-preview"
+model3p = "gemini-3.1-flash-lite-preview"
+model1s = "gemini-2.5-pro"
+model2s = "gemini-2.5-flash"
+model3s = "gemini-2.5-flash-lite"

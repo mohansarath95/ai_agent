@@ -1,8 +1,12 @@
 import os
+from xmlrpc import client
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 import argparse
+from prompts import system_prompt
+from call_functions import available_functions
+from models import *
 
 def main():
     print("Hello from aiagent!")
@@ -21,7 +25,15 @@ def main():
     # Create a message with the user's prompt
     messages = [types.Content(role="user", parts=[types.Part(text=args.user_prompt)])]
 
-    response = generate_content(client, messages)
+    model_name = model2s        #MODEL
+
+    response = client.models.generate_content(
+        model=model_name,
+        contents=messages,
+        config=types.GenerateContentConfig(
+            tools=[available_functions], system_instruction=system_prompt
+        )
+    )
 
     if response.usage_metadata is None:
         raise RuntimeError("API request failed: usage_metadata is missing from the response.")
@@ -31,6 +43,9 @@ def main():
         print(f"Prompt tokens: {response.usage_metadata.prompt_token_count}")
         print(f"Response tokens: {response.usage_metadata.candidates_token_count}")
     
+    if response.function_calls:
+        for function_call in response.function_calls:
+            print(f"Calling function: {function_call.name}({function_call.args})")
     print(f"Response:\n{response.text}")
 
 def generate_content(client, messages):
