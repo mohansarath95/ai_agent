@@ -7,7 +7,7 @@ from prompts import system_prompt
 from call_functions import available_functions, call_function
 from models import *
 
-MODEL = model2s        #AI MODEL, check models.py
+MODEL = model2p        #AI MODEL, check models.py
 
 def main():
     parser = argparse.ArgumentParser(description="Chatbot")
